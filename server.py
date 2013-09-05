@@ -61,19 +61,36 @@ def calendar():
                 'end': end,
               })
 
-        calendar['events'] = sorted(calendar['events'], key=lambda event: event['begin'], reverse=True)
+        # sort by date
+        calendar['events'] = sorted(calendar['events'], key=lambda event: event['begin'])
     except:
         return jsonify({'message': "Google Lookup Failure"}), 500
 
-    today = {}
-    upcoming = {}
+    todays = {'events': []}
+    upcoming = {'events': []}
 
+    # Divide up today vs this week
     for event in calendar['events']:
         if event['begin'] < tonight:
-            print event
+            todays['events'].append({
+                'title': event['title'],
+                'begin': timegm(event['begin'].utctimetuple()),
+                'begin-label': event['begin'].strftime('%A %b %d, %I:%M %p'),
+                'end': timegm(event['end'].utctimetuple()),
+                'end-label': event['end'].strftime('%A %b %d, %I:%M %p'),
+            })
+        else:
+            upcoming['events'].append({
+                'title': event['title'],
+                'begin': timegm(event['begin'].utctimetuple()),
+                'begin-label': event['begin'].strftime('%A %b %d, %I:%M %p'),
+                'end': timegm(event['end'].utctimetuple()),
+                'end-label': event['end'].strftime('%A %b %d, %I:%M %p'),
+            })
 
-    # Success
-    return jsonify(dict({'message': "success"}, **today))
+    # Push to frontend
+    union = {'today': todays, 'upcoming': upcoming}
+    return jsonify(dict({'message': "success"}, **union))
 
 if __name__ == "__main__":
     app.debug = True
