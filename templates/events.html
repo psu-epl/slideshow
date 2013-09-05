@@ -20,7 +20,7 @@
     <div id="today">
     </div>
  </div>
- <div class="col-lg-7">
+ <div class="col-lg-9">
     <h2>This Week</h2>
     <div id="week">
     </div>
@@ -107,6 +107,70 @@
             }
             return hour + ante;
        });
+</script>
+
+<script>
+    var days = 9;
+    var dw = 100.0/days;
+    var begin_hour = 7;
+    var end_hour   = 24;
+    var hour_range = end_hour - begin_hour;
+    var hh = 100.0 / hour_range;
+
+    var now = new Date();
+    var today = now.getDay();
+    var weekday=new Array(7);
+    weekday[0]="Sunday";
+    weekday[1]="Monday";
+    weekday[2]="Tuesday";
+    weekday[3]="Wednesday";
+    weekday[4]="Thursday";
+    weekday[5]="Friday";
+    weekday[6]="Saturday";
+
+    console.log(weekday[today]);
+
+    // Create chart
+    var wsvg = d3.select("#week").append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("class", "chart")
+        .append("g");
+
+    // Backgrond days
+    var dayr = wsvg.selectAll(".day").data(d3.range(days));
+    dayr.enter().append("rect")
+        .attr("class", "day")
+        .attr("width", dw+"%")
+        .attr("x", function (d) { return d*dw + "%"; })
+        .attr("height", "100%")
+        .attr("y", 0);
+
+    // Backgrond hours
+    var whours = wsvg.selectAll(".hourline").data(d3.range(hour_range));
+    whours.enter().append("line")
+        .attr("class", "hourline")
+        .attr("x1", 0)
+        .attr("x2", '100%')
+        .attr("y1", function (d) { return d*hh + hh + "%"; })
+        .attr("y2", function (d) { return d*hh + hh + "%"; });
+
+    // Backgrond labels
+    var wlabels = wsvg.selectAll(".day-labels").data(d3.range(days));
+    wlabels.enter().append("text")
+        .attr("class", "day-labels")
+        .attr("x", function (d) { return d*dw + 1 + "%"; })
+        .attr("y", 0)
+        .text(function (d) {
+            d = d + today + 1;
+            if (d < 7)
+                return weekday[d];
+            return weekday[d-7]
+        });
+
+
+
+
 </script>
 
 

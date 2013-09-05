@@ -42,4 +42,25 @@
 .event-label-time {
     baseline-shift: -2.8em;
     font-size: 12px;
+}
 
+.day {
+    fill: none;
+}
+
+.day:nth-child(even) {
+    fill: #f7f7ff;
+}
+
+.day-labels {
+    fill: #999;
+    baseline-shift: -1.2em;
+}
+
+.hourline {
+    stroke: none;
+}
+
+.hourline:nth-child(even) {
+    stroke: #f7f7ff;
+}
