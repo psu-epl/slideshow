@@ -5,6 +5,7 @@ from calendar import timegm
 import datetime
 from datetime import tzinfo
 import xml.etree.ElementTree as ET
+import config
 
 app = Flask(__name__)
 
@@ -30,7 +31,9 @@ def calendar():
     tonight = datetime.datetime(now.year, now.month, now.day, 10, 0, 0, 0, UTC()) + datetime.timedelta(days=1)
 
     # Get current public calendar
-    url = "https://www.google.com/calendar/feeds/epl.pdx%40gmail.com/public/full?start-min=2013-09-04T00:00:00-00:00&start-max=2013-09-11T00:00:00-00:00&singleevents=true"
+    url = config.CALENDAR_URL % (today.isoformat(), (today+datetime.timedelta(days=8)).isoformat())
+    # TODO: this is a bad hack
+    url = url.replace('+','-')
     response = urllib2.urlopen(url)
 
     # Init return object
