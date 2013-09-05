@@ -34,14 +34,26 @@
     var range = end_hour - begin_hour;
     var h = 100.0 / range;
 
+
+    var todaydata = [
+      {
+        "begin": 11.0, 
+        "begin-label": "11:00 AM", 
+        "end": 15.5, 
+        "end-label": "03:30 PM", 
+        "title": "Nathan Bergey's Lab hours"
+      }
+    ];
+
+    // Create chart
     var svg = d3.select("#today").append("svg")
         .attr("width", "100%")
         .attr("height", "100%")
         .attr("class", "chart")
         .append("g");
 
+    // Backgrond bars
     var hours = svg.selectAll(".hour").data(d3.range(range));
-
     hours.enter().append("rect")
         .attr("class", "hour")
         .attr("width", "100%")
@@ -49,8 +61,39 @@
         .attr("height", h+"%")
         .attr("x", 0);
 
-    var hour_lables = svg.selectAll(".hour-label").data(d3.range(range));
+    // Draw time boxes
+    var events = svg.selectAll(".event").data(todaydata);
+    events.enter().append("rect")
+        .attr("class", "event")
+        .attr("rx", 4)
+        .attr("ry", 4)
+        .attr("width", "67%")
+        .attr("y", function (d) { return (d["begin"]-begin_hour)*h + "%"; })
+        .attr("height", function (d) {
+            passage = d["end"] - d["begin"];
+            return passage*h + "%";
+        })
+        .attr("x", '5%');
 
+    // Time box label
+    var event_labels = svg.selectAll(".event-label").data(todaydata);
+    events.enter().append("text")
+        .attr("class", "event-label")
+        .attr("y", function (d) { return (d["begin"]-begin_hour)*h + "%"; })
+        .attr("x", '7%')
+        .attr("width", "67%")
+        .text(function (d) {return d["title"]; });
+    
+    events.enter().append("text")
+        .attr("class", "event-label-time")
+        .attr("y", function (d) { return (d["begin"]-begin_hour)*h + "%"; })
+        .attr("x", '7%')
+        .attr("width", "67%")
+        .text(function (d) {return d["begin-label"]+' to '+d["end-label"] ; });
+
+
+    // hour bar lables
+    var hour_lables = svg.selectAll(".hour-label").data(d3.range(range));
     hour_lables.enter().append("text")
         .attr("class", "hour-label")
         .attr("x", '97%')
@@ -63,9 +106,7 @@
                 ante = ' pm';
             }
             return hour + ante;
-        });
-
-    
+       });
 </script>
 
 

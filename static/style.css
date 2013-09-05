@@ -26,3 +26,20 @@
     text-anchor: end;
     baseline-shift: -1.2em;
 }
+
+.event {
+    fill: #74c76e;
+    stroke: #4f694e;
+    stroke-width: 2;
+}
+
+.event-label {
+    baseline-shift: -1.2em;
+    font-size: 12px;
+    font-weight: bold;
+}
+
+.event-label-time {
+    baseline-shift: -2.8em;
+    font-size: 12px;
+

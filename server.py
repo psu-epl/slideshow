@@ -60,13 +60,11 @@ def calendar():
             end = parser.parse(times.get('endTime', None))
 
             # Pack
-            calendar['events'].append(
-              {
+            calendar['events'].append({
                 'title': title,
                 'begin': begin,
-                #'begin-label': begin.strftime('%A %b %d, %I:%M %p'),
                 'end': end,
-              })
+            })
 
         # sort by date
         calendar['events'] = sorted(calendar['events'], key=lambda event: event['begin'])
@@ -79,12 +77,14 @@ def calendar():
     # Divide up today vs this week
     for event in calendar['events']:
         if event['begin'] < tonight:
+            begin_hour = event['begin'].hour + (event['begin'].minute/60.0)
+            end_hour = event['end'].hour + (event['end'].minute/60.0)
             todays['events'].append({
                 'title': event['title'],
-                'begin': timegm(event['begin'].utctimetuple()),
-                'begin-label': event['begin'].strftime('%A %b %d, %I:%M %p'),
-                'end': timegm(event['end'].utctimetuple()),
-                'end-label': event['end'].strftime('%A %b %d, %I:%M %p'),
+                'begin': begin_hour,
+                'begin-label': event['begin'].strftime('%I:%M %p'),
+                'end': end_hour,
+                'end-label': event['end'].strftime('%I:%M %p'),
             })
         else:
             upcoming['events'].append({
