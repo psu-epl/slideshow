@@ -2,9 +2,20 @@ from flask import Flask, render_template, jsonify
 import urllib2
 from dateutil import parser
 from calendar import timegm
+import datetime
+from datetime import tzinfo
 import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
+
+class UTC(tzinfo):
+    """UTC"""
+    def utcoffset(self, dt):
+        return datetime.timedelta(0)
+    def tzname(self, dt):
+        return "UTC"
+    def dst(self, dt):
+        return datetime.timedelta(0)
 
 @app.route("/")
 def index():
@@ -12,6 +23,11 @@ def index():
 
 @app.route("/calendar.json")
 def calendar():
+
+    # times
+    now = datetime.datetime.utcnow()
+    today = datetime.datetime(now.year, now.month, now.day, 10, 0, 0, 0, UTC())  
+    tonight = datetime.datetime(now.year, now.month, now.day, 10, 0, 0, 0, UTC()) + datetime.timedelta(days=1)
 
     # Get current public calendar
     url = "https://www.google.com/calendar/feeds/epl.pdx%40gmail.com/public/full?start-min=2013-09-04T00:00:00-00:00&start-max=2013-09-11T00:00:00-00:00&singleevents=true"
@@ -38,19 +54,26 @@ def calendar():
 
             # Pack
             calendar['events'].append(
-                {
-                    'title': title,
-                    'begin': timegm(begin.utctimetuple()),
-                    'begin-label': begin.strftime('%A %b %d, %I:%M %p'),
-                    'end': timegm(end.utctimetuple()),
-                    'end-label': end.strftime('%A %b %d, %I:%M %p'),
-                })
+              {
+                'title': title,
+                'begin': begin,
+                #'begin-label': begin.strftime('%A %b %d, %I:%M %p'),
+                'end': end,
+              })
 
+        calendar['events'] = sorted(calendar['events'], key=lambda event: event['begin'], reverse=True)
     except:
         return jsonify({'message': "Google Lookup Failure"}), 500
 
+    today = {}
+    upcoming = {}
+
+    for event in calendar['events']:
+        if event['begin'] < tonight:
+            print event
+
     # Success
-    return jsonify(dict({'message': "success"}, **calendar))
+    return jsonify(dict({'message': "success"}, **today))
 
 if __name__ == "__main__":
     app.debug = True
