@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link href="/static/bootstrap.min.css" rel="stylesheet">
+ <link href="/static/style.css" rel="stylesheet">
+ <script src="/static/jquery-2.0.3.min.js"> </script>
+ <script src="/static/bootstrap.min.js"> </script>
+ <script src="/static/d3.v3.min.js"> </script>
+ <title>PSU EPL Window</title>
+</head>
+<body>
+
+
+
+<div id="events" class="row">
+ <div id="today-box" class="col-lg-3">
+    <h2>Today</h2>
+    <div id="today">
+    </div>
+ </div>
+ <div class="col-lg-7">
+    <h2>This Week</h2>
+    <div id="week">
+    </div>
+ </div>
+</div>
+
+<script>
+    var begin_hour = 7;
+    var end_hour   = 24;
+
+    var range = end_hour - begin_hour;
+    var h = 100.0 / range;
+
+    var svg = d3.select("#today").append("svg")
+        .attr("width", "100%")
+        .attr("height", "100%")
+        .attr("class", "chart")
+        .append("g");
+
+    var hours = svg.selectAll(".hour").data(d3.range(range));
+
+    hours.enter().append("rect")
+        .attr("class", "hour")
+        .attr("width", "100%")
+        .attr("y", function (d) { return d*h + "%"; })
+        .attr("height", h+"%")
+        .attr("x", 0);
+
+    var hour_lables = svg.selectAll(".hour-label").data(d3.range(range));
+
+    hour_lables.enter().append("text")
+        .attr("class", "hour-label")
+        .attr("x", '97%')
+        .attr("y",  function (d) { return d*h + "%"; })
+        .text(function (d) { 
+            var hour = d+begin_hour;
+            var ante = ' am';
+            if (hour > 12) {
+                hour = hour - 12;
+                ante = ' pm';
+            }
+            return hour + ante;
+        });
+
+    
+</script>
+
+
+</body>
+</html>
