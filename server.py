@@ -1,5 +1,6 @@
-from flask import Flask, render_template
-import httplib
+from flask import Flask, render_template, jsonify
+import urllib2
+from dateutil import parser
 import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
@@ -8,21 +9,31 @@ app = Flask(__name__)
 def index():
     return render_template('index.html')
 
-@app.route("/cal")
-def cal():
-    c = httplib.HTTPSConnection("www.google.com")
-    c.request("GET", "/calendar/feeds/epl.pdx%40gmail.com/public/basic")
-    response = c.getresponse()
+@app.route("/calendar.json")
+def calendar():
 
-    root = ""
-    if response.status == 200:
-        data = response.read()
-        root = ET.fromstring(data)
+    # Get current public calendar
+    url = "https://www.google.com/calendar/feeds/epl.pdx%40gmail.com/public/full?start-min=2013-09-04T00:00:00-00:00&start-max=2013-09-11T00:00:00-00:00&singleevents=true"
+    response = urllib2.urlopen(url)
 
-    for child in root:
-        print child.tag, child.attrib
+    # Init return object
+    calendar = {}
+    calendar['events'] = []
 
-    return root.tag
+    try:
+        root = ET.fromstring(response.read())
+        entries = root.findall('{http://www.w3.org/2005/Atom}entry')
+
+        # Loop through events
+        for entry in entries:
+            title = entry.find('{http://www.w3.org/2005/Atom}title').text
+            calendar['events'].append({'title': title})
+
+    except:
+        return jsonify({'message': "Google Lookup Failure"}), 500
+
+    # Success
+    return jsonify(dict({'message': "success"}, **calendar))
 
 if __name__ == "__main__":
     app.debug = True
