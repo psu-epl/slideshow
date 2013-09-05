@@ -1,6 +1,7 @@
 from flask import Flask, render_template, jsonify
 import urllib2
 from dateutil import parser
+from calendar import timegm
 import xml.etree.ElementTree as ET
 
 app = Flask(__name__)
@@ -26,8 +27,24 @@ def calendar():
 
         # Loop through events
         for entry in entries:
+
+            # Event title and times
             title = entry.find('{http://www.w3.org/2005/Atom}title').text
-            calendar['events'].append({'title': title})
+            times =  entry.find('{http://schemas.google.com/g/2005}when').attrib
+
+            # Parse times
+            begin = parser.parse(times.get('startTime', None))
+            end = parser.parse(times.get('endTime', None))
+
+            # Pack
+            calendar['events'].append(
+                {
+                    'title': title,
+                    'begin': timegm(begin.utctimetuple()),
+                    'begin-label': begin.strftime('%A %b %d, %I:%M %p'),
+                    'end': timegm(end.utctimetuple()),
+                    'end-label': end.strftime('%A %b %d, %I:%M %p'),
+                })
 
     except:
         return jsonify({'message': "Google Lookup Failure"}), 500
