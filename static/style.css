@@ -11,6 +11,7 @@ html, body
 #today, #week {
     width: 100%;
     height: 600px;
+    position: absolute;
 }
 
 .hour {
@@ -42,39 +43,19 @@ html, body
 }
 
 .event {
-    fill: #74c76e;
-    stroke: #4f694e;
-    stroke-width: 2;
+    display: block;
+    position: absolute;
+    top: 0px;
+    width: 73%;
+    background: #fc2;
+    padding: 6px;
+    font-style: italic;
+    border-radius: 5px;
+    border: 2px solid #cfc;
+    margin-left: 5px;
 }
 
-.event-label {
-    baseline-shift: -1.2em;
-    font-size: 12px;
+.event .title {
     font-weight: bold;
-}
-
-.event-label-time {
-    baseline-shift: -2.8em;
-    font-size: 12px;
-}
-
-.day {
-    fill: none;
-}
-
-.day:nth-child(even) {
-    fill: #f7f7ff;
-}
-
-.day-labels {
-    fill: #999;
-    baseline-shift: -1.2em;
-}
-
-.hourline {
-    stroke: none;
-}
-
-.hourline:nth-child(even) {
-    stroke: #f7f7ff;
+    font-style: normal;
 }

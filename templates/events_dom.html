@@ -80,6 +80,7 @@
                 return hour + ante;
            });
 
+    // Create Week Chart
     var week = d3.select("#week thead tr");
     var daynames = week.selectAll("th").data(d3.range(ndays));
     daynames.enter().append("th")
@@ -91,7 +92,6 @@
             return weekday[d-7]
         });
 
-
     var week = d3.select("#week tbody");
     var dayhours = week.selectAll("tr").data(d3.range(range));
     dayhours.enter().append("tr")
@@ -100,6 +100,20 @@
     var days = dayhours.selectAll("td").data(d3.range(ndays));
     days.enter().append("td")
         .html('&nbsp;');
+
+    // Draw Today Box
+    var todayevents = d3.select("#today").selectAll("div").data(todaydata);
+    todayevents.enter().append("div")
+        .attr("class", "event")
+        .attr("style", "top:"+240+"px;")
+        .html(function (d) {
+            var t = d["title"];
+            var b = d["begin-label"];
+            b += " to ";
+            b += d["end-label"];
+            return '<span class="title">'+t+'</span><br>'+b;
+        });
+
 
 
 </script>
