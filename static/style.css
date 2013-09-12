@@ -1,30 +1,31 @@
 #events {
     width: 100%;
-    height: 400px;
+    height: 100%;
+
+}
+html, body
+{
+    height: 100%;
 }
 
-#today-box {
+#today, #week {
+    width: 100%;
+    height: 600px;
 }
-
-#today {
-}
-
 
 .hour {
-    fill: none;
-    stroke-width: 1;
-    stroke: #eef;
+    color: #999;
+}
+
+.hour td, .hour th {
+    text-align: right;
+    vertical-align: top;
+    line-height: 1.0em;
+    padding-right: 5px;
 }
 
 .hour:nth-child(even) {
-    fill: #f7f7ff;
-    stroke: none;
-}
-
-.hour-label {
-    fill: #999;
-    text-anchor: end;
-    baseline-shift: -1.2em;
+    background: #f7f7ff;
 }
 
 .event {

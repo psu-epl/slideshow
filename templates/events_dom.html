@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+ <meta charset="utf-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <link href="/static/bootstrap.min.css" rel="stylesheet">
+ <link href="/static/style.css" rel="stylesheet">
+ <script src="/static/jquery-2.0.3.min.js"> </script>
+ <script src="/static/bootstrap.min.js"> </script>
+ <script src="/static/d3.v3.min.js"> </script>
+ <title>PSU EPL Window</title>
+</head>
+<body>
+
+
+
+<div id="events" class="row">
+ <div id="today-box" class="col-lg-3">
+    <h2>Today</h2>
+    <table id="today">
+     <thead>
+      <tr class="hour"><th>&nbsp;</th></tr>
+     </thead>
+     <tbody>
+     </tbody>
+    </table>
+ </div>
+ <div class="col-lg-9">
+    <h2>This Week</h2>
+    <table id="week">
+     <thead><tr class="hour"> </tr></thead>
+     <tbody> </tbody>
+    </table>
+ </div>
+</div>
+<script>
+    var begin_hour = 7,
+        end_hour   = 24,
+        begin_day  = 1,
+        end_day    = 9;
+
+    var range = end_hour - begin_hour;
+
+    var todaydata = [
+      {
+        "begin": 11.0, 
+        "begin-label": "11:00 AM", 
+        "end": 15.5, 
+        "end-label": "03:30 PM", 
+        "title": "Nathan Bergey's Lab hours"
+      }
+    ];
+
+    // Create Today chart
+    var today = d3.select("#today tbody");
+    var hours = today.selectAll(".hour").data(d3.range(range));
+    hours.enter().append("tr")
+        .attr("class", "hour")
+            .append("td")
+            .text(function (d) { 
+                var hour = d+begin_hour;
+                var ante = ' am';
+                if (hour > 12) {
+                    hour = hour - 12;
+                    ante = ' pm';
+                }
+                return hour + ante;
+           });
+
+    var week = d3.select("#week thead tr");
+    var daynames = week.selectAll("th").data(d3.range(9));
+    daynames.enter().append("th")
+        .text('day');
+
+    var week = d3.select("#week tbody");
+    var dayhours = week.selectAll("tr").data(d3.range(range));
+    dayhours.enter().append("tr")
+            .attr("class", "hour");
+
+    var days = dayhours.selectAll("td").data(d3.range(9));
+    days.enter().append("td")
+        .text('.');
+
+
+</script>
+</body>
+</html>

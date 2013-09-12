@@ -26,6 +26,12 @@ def index():
 def draw():
     return render_template('events.html')
 
+
+@app.route("/drawdom")
+def drawdom():
+    return render_template('events_dom.html')
+
+
 @app.route("/calendar.json")
 def calendar():
 
