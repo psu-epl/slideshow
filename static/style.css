@@ -14,18 +14,31 @@ html, body
 }
 
 .hour {
-    color: #999;
+    color: #777;
 }
 
 .hour td, .hour th {
-    text-align: right;
     vertical-align: top;
     line-height: 1.0em;
     padding-right: 5px;
+    font-weight: 500;
+}
+
+#today td {
+    text-align: right;
+}
+
+#week th {
+    text-align: center;
+    font-style: italic;
 }
 
 .hour:nth-child(even) {
     background: #f7f7ff;
+}
+
+#week .hour td {
+    border-right: 1px solid #bbf;
 }
 
 .event {

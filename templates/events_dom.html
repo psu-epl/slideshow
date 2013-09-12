@@ -37,9 +37,22 @@
     var begin_hour = 7,
         end_hour   = 24,
         begin_day  = 1,
-        end_day    = 9;
+        end_day    = 10;
 
     var range = end_hour - begin_hour;
+    var ndays = end_day - begin_day;
+    var weekday=new Array(7);
+    weekday[0]="Sunday";
+    weekday[1]="Monday";
+    weekday[2]="Tuesday";
+    weekday[3]="Wednesday";
+    weekday[4]="Thursday";
+    weekday[5]="Friday";
+    weekday[6]="Saturday";
+
+
+    var now = new Date();
+    var today = now.getDay();
 
     var todaydata = [
       {
@@ -52,8 +65,8 @@
     ];
 
     // Create Today chart
-    var today = d3.select("#today tbody");
-    var hours = today.selectAll(".hour").data(d3.range(range));
+    var todaybody = d3.select("#today tbody");
+    var hours = todaybody.selectAll(".hour").data(d3.range(range));
     hours.enter().append("tr")
         .attr("class", "hour")
             .append("td")
@@ -68,18 +81,25 @@
            });
 
     var week = d3.select("#week thead tr");
-    var daynames = week.selectAll("th").data(d3.range(9));
+    var daynames = week.selectAll("th").data(d3.range(ndays));
     daynames.enter().append("th")
-        .text('day');
+        .attr('width', 100.0/ndays+"%")
+        .text(function (d) {
+            d = d + today + 1;
+            if (d < 7)
+                return weekday[d];
+            return weekday[d-7]
+        });
+
 
     var week = d3.select("#week tbody");
     var dayhours = week.selectAll("tr").data(d3.range(range));
     dayhours.enter().append("tr")
             .attr("class", "hour");
 
-    var days = dayhours.selectAll("td").data(d3.range(9));
+    var days = dayhours.selectAll("td").data(d3.range(ndays));
     days.enter().append("td")
-        .text('.');
+        .html('&nbsp;');
 
 
 </script>
