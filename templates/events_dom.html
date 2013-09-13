@@ -101,11 +101,20 @@
     days.enter().append("td")
         .html('&nbsp;');
 
-    // Draw Today Box
+
+    //var tdh = $('#today td').height();
+    //console.log(tdh);
+
+    // Draw Today Boxs
     var todayevents = d3.select("#today").selectAll("div").data(todaydata);
     todayevents.enter().append("div")
         .attr("class", "event")
-        .attr("style", "top:"+240+"px;")
+        .attr("style", function (d) {
+            var tdh = $('#today td').height() + 2;
+            var n = d['begin'] - begin_hour;
+            var h = d['end'] - d['begin'];
+            return "top:"+((tdh*n)+16)+"px;height:"+h*tdh+"px;";
+        })
         .html(function (d) {
             var t = d["title"];
             var b = d["begin-label"];
