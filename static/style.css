@@ -23,6 +23,7 @@ html, body
     line-height: 1.0em;
     padding-right: 5px;
     font-weight: 500;
+    padding-right: 0;
 }
 
 #today td {

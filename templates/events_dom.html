@@ -60,7 +60,34 @@
         "begin-label": "11:00 AM", 
         "end": 15.5, 
         "end-label": "03:30 PM", 
-        "title": "Nathan Bergey's Lab hours"
+        "title": "Nathan Bergey's Lab hours",
+      }
+    ];
+
+    var weekdata = [
+      {
+        "day": 1,
+        "begin": 10.0,
+        "begin-label": "10:00 AM",
+        "end": 13.4,
+        "end-label": "1:23 PM",
+        "title": "Someone's Lab Hours",
+      },
+      {
+        "day": 4,
+        "begin": 11.0,
+        "begin-label": "10:00 AM",
+        "end": 15.4,
+        "end-label": "1:23 PM",
+        "title": "Someone's Lab Hours",
+      },
+      {
+        "day": 9,
+        "begin": 11.0,
+        "begin-label": "10:00 AM",
+        "end": 15.4,
+        "end-label": "1:23 PM",
+        "title": "Someone's Lab Hours",
       }
     ];
 
@@ -124,6 +151,26 @@
         });
 
 
+    // Draw Week
+    var weekevents =  d3.select("#week").selectAll("div").data(weekdata);
+    weekevents.enter().append("div")
+        .attr("class", "event")
+        .attr("style", function (d) {
+            var tdh = $('#today td').height() + 2;
+            var tdw = $('#week td').width() + 1;
+            console.log(tdw);
+            var dn = d['day'] - 1;
+            var n = d['begin'] - begin_hour;
+            var h = d['end'] - d['begin'];
+            return "top:"+((tdh*n)+16)+"px;left:"+tdw*dn+"px;height:"+h*tdh+"px;width:"+(tdw-10)+"px;";
+        })
+        .html(function (d) {
+            var t = d["title"];
+            var b = d["begin-label"];
+            b += " to ";
+            b += d["end-label"];
+            return '<span class="title">'+t+'</span><br>'+b;
+        });
 
 </script>
 </body>
